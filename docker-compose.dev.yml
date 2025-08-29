@@ -17,8 +17,9 @@ saplredis:
     - "6379:6379"
 sapl:
   #image: interlegis/sapl:master
-  build: .
-  dockerfile: Dockerfile.dev
+  build:
+    context: .
+    dockerfile: Dockerfile.dev
   restart: always
   environment:
     ADMIN_PASSWORD: interlegis
@@ -40,4 +41,4 @@ sapl:
     - sapldb
     - saplredis
   ports:
-    - "80:80"
+    - "8001:80"

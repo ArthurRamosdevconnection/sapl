@@ -5,4 +5,5 @@ COPY requirements ./requirements/
 RUN apt update && \
     apt -y install graphviz-dev && \
     pip install -r ./requirements/dev-requirements.txt
+COPY . .
 EXPOSE 8000

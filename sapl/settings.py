@@ -103,6 +103,7 @@ INSTALLED_APPS = (
 
     'webpack_loader',
 
+    'pwa',
     'channels',
 
 ) + SAPL_APPS
@@ -144,7 +145,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -392,5 +393,19 @@ def remove_warnings():
         message='Unable to import floppyforms.gis'
     )
 
-
 remove_warnings()
+if 'runserver' in sys.argv:
+    MIGRATION_MODULES = {
+        'parlamentares': None,
+        'audiencia': None,
+        'materia': None,
+        'norma': None,
+        'sessao': None,
+        'comissoes': None,
+        'compilacao': None,
+        'protocoloadm': None,
+        'painel': None,
+        'relatorios': None,
+        'lexml': None,
+        'base': None,
+    }
