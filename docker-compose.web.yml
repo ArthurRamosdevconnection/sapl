@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  saplsolr:
+    image: solr:8.3
+    restart: always
+    command: bin/solr start -c -f
+    volumes:
+      - solr_data:/opt/solr/server/solr
+      - solr_configsets:/opt/solr/server/solr/configsets
+    ports:
+      - "8983:8983"
+    networks:
+      - sapl-net
+
+  sapl:
+    image: interlegis/sapl:3.1.161-RC0
+    restart: always
+    volumes:
+      - sapl_data:/var/interlegis/sapl/data
+      - sapl_media:/var/interlegis/sapl/media
+    ports:
+      - "8020:80"
+
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8002:8000"
+    volumes:
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - ./export:/usr/src/paperless/export
+      - ./consume:/usr/src/paperless/consume
+volumes:
+  sapl_data:
+  sapl_media:
+  solr_data:
+  solr_configsets:
+  data:
+  media:
