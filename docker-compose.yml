@@ -56,7 +56,7 @@ services:
       - saplsolr
       - saplredis
     ports:
-      - "80:80"
+      - "8020:80"
     networks:
       - sapl-net
   broker:
