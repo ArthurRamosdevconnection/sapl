@@ -11,7 +11,7 @@ services:
     volumes:
       - sapldb_data:/var/lib/postgresql/data/
     ports:
-      - "5433:5432"
+      - "5437:5432"
     networks:
       - sapl-net
   saplsolr:
