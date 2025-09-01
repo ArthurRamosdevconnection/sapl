@@ -1,19 +1,32 @@
 version: "3.7"
 services:
-  sapldb:
-    image: postgres:10.5-alpine
-    restart: always
+  # Consolidated PostgreSQL - serves both SAPL and Paperless
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: sapl
-      POSTGRES_USER: sapl
-      POSTGRES_DB: sapl
-      PGDATA : /var/lib/postgresql/data/
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
     volumes:
-      - sapldb_data:/var/lib/postgresql/data/
+      - pgdata:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
     ports:
       - "5437:5432"
     networks:
       - sapl-net
+
+
+  # Consolidated Redis - serves both SAPL and Paperless
+  redis:
+    image: redis:8
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    ports:
+      - "6380:6379"
+    networks:
+      - sapl-net
+
   saplsolr:
     image: solr:8.3
     restart: always
@@ -25,11 +38,7 @@ services:
       - "8983:8983"
     networks:
       - sapl-net
-  saplredis:
-    image: redis:5.0.3-stretch
-    restart: always
-    ports:
-      - "6380:6379"
+
   sapl:
     image: interlegis/sapl:3.1.161-RC0
     #build: .
@@ -48,37 +57,26 @@ services:
       SOLR_COLLECTION: sapl
       SOLR_URL: http://saplsolr:8983
       TZ: America/Sao_Paulo
+      # Updated database connection
+      DATABASE_URL: postgresql://sapl:sapl@postgres:5432/sapl
     volumes:
       - sapl_data:/var/interlegis/sapl/data
       - sapl_media:/var/interlegis/sapl/media
     depends_on:
-      - sapldb
+      - postgres
       - saplsolr
-      - saplredis
+      - redis
     ports:
       - "8020:80"
     networks:
       - sapl-net
-  broker:
-    image: docker.io/library/redis:8
-    restart: unless-stopped
-    volumes:
-      - redisdata:/data
-  db:
-    image: docker.io/library/postgres:17
-    restart: unless-stopped
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: paperless
-      POSTGRES_USER: paperless
-      POSTGRES_PASSWORD: paperless
+
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
     depends_on:
-      - db
-      - broker
+      - postgres
+      - redis
     ports:
       - "8002:8000"
     volumes:
@@ -87,14 +85,20 @@ services:
       - ./export:/usr/src/paperless/export
       - ./consume:/usr/src/paperless/consume
     environment:
-      PAPERLESS_REDIS: redis://broker:6379
-      PAPERLESS_DBHOST: db
+      # Updated to use consolidated Redis (database 1 to separate from SAPL)
+      PAPERLESS_REDIS: redis://redis:6379/1
+      # Updated database connection
+      PAPERLESS_DBHOST: postgres
+      PAPERLESS_DBNAME: paperless
+      PAPERLESS_DBUSER: paperless
+      PAPERLESS_DBPASS: paperless
+
 networks:
   sapl-net:
     name: sapl-net
     driver: bridge
+
 volumes:
-  sapldb_data:
   sapl_data:
   sapl_media:
   solr_data:
