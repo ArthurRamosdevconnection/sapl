@@ -23,7 +23,7 @@ services:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
     ports:
-      - "8002:8000"
+      - "8010:8000"
     volumes:
       - data:/usr/src/paperless/data
       - media:/usr/src/paperless/media
