@@ -25,6 +25,7 @@ async function cacheAllStaticFiles() {
 self.addEventListener('install', event => {
     console.log('Service Worker: Instalando...');
 
+
     event.waitUntil(
         Promise.all([
             // Cacheia URLs essenciais
