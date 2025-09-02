@@ -19,7 +19,7 @@ services:
   sapl:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - sapl_data:/var/interlegis/sapl/data
