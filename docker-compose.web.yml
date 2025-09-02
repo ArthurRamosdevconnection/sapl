@@ -17,9 +17,7 @@ services:
       start_period: 60s
 
   sapl:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: interlegis/sapl:3.1.161-RC0
     restart: always
     volumes:
       - sapl_data:/var/interlegis/sapl/data
