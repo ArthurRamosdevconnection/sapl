@@ -25,7 +25,7 @@ services:
     ports:
       - "8020:80"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f postgres://postgres:GNBgtwnJ7Wlznyr3Y3T0wIqei6mQI3KIaoIhUYUM101VnGi1csFUnVW8Gqdry962@144.91.64.27:5555/postgres || exit 1"]
+      test: ["CMD-SHELL", "curl -f postgres://postgres:3HSjV362HCxRNJZ1Y6rZAKwb1d3rdTbQmlVSJxgYpgCPTcpp2xgxa4eNGbL9jCro@72.60.63.25:5432/postgres || exit 1"]
       interval: 30s
       timeout: 15s
       retries: 5
@@ -45,7 +45,7 @@ services:
       - ./export:/usr/src/paperless/export
       - ./consume:/usr/src/paperless/consume
     healthcheck:
-      test: ["CMD-SHELL", "curl -f postgres://postgres:GNBgtwnJ7Wlznyr3Y3T0wIqei6mQI3KIaoIhUYUM101VnGi1csFUnVW8Gqdry962@144.91.64.27:5555/postgres || exit 1"]
+      test: ["CMD-SHELL", "curl -f postgres://postgres:3HSjV362HCxRNJZ1Y6rZAKwb1d3rdTbQmlVSJxgYpgCPTcpp2xgxa4eNGbL9jCro@72.60.63.25:5432/postgres || exit 1"]
       interval: 30s
       timeout: 20s
       retries: 5
