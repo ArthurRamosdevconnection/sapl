@@ -33,7 +33,7 @@ RUN pip install -r /var/interlegis/sapl/requirements/requirements.txt --upgrade 
 
 COPY config/env_dockerfile /var/interlegis/sapl/sapl/.env
 
-RUN python3 manage.py collectstatic --noinput --clear
+#RUN python3 manage.py collectstatic --noinput --clear
 
 # Remove .env(fake) e sapl.db da imagem
 RUN rm -rf /var/interlegis/sapl/sapl/.env && \
