@@ -313,7 +313,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = PROJECT_DIR.child("collected_static")
 
 STATICFILES_DIRS = (
-    BASE_DIR.child('static'), BASE_DIR.child('sapl').child('pwa').child('templates'),
+    BASE_DIR.child('static'), PROJECT_DIR.child('pwa').child('templates'),
 )
 if FRONTEND_CUSTOM:
     STATICFILES_DIRS = (
