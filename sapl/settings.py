@@ -103,7 +103,7 @@ INSTALLED_APPS = (
 
     'webpack_loader',
 
-    'pwa',
+    "pwa.apps.PwaConfig",
     'channels',
 
 ) + SAPL_APPS
