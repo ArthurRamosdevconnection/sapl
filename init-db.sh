@@ -9,11 +9,9 @@ create_db() {
 
     echo "Criando banco '$db' com usuário '$user'"
 
-    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-        CREATE USER $user WITH PASSWORD '$pass';
-        CREATE DATABASE $db OWNER $user;
-        GRANT ALL PRIVILEGES ON DATABASE $db TO $user;
-EOSQL
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -c "CREATE USER ${user} WITH PASSWORD '${pass}';"
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -c "CREATE DATABASE ${db} OWNER ${user};"
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -c "GRANT ALL PRIVILEGES ON DATABASE ${db} TO ${user};"
 }
 
 # Chamadas
